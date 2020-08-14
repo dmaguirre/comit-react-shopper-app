@@ -16,15 +16,11 @@ export default function ItemsTable() {
     },
   ];
 
-  const rows = items.map((item) => (
-    <tr key={item.id}>
-      <td>{item.name}</td>
-    </tr>
-  ));
-
   return (
-    <table>
-      <tbody>{rows}</tbody>
-    </table>
+    <ul>
+      {items.map((item) => (
+        <li>{item.name}</li>
+      ))}
+    </ul>
   );
 }

@@ -17,14 +17,10 @@ export default function CartTable() {
   ];
 
   return (
-    <table>
-      <tbody>
-        {items.map((item) => (
-          <tr key={item.id}>
-            <td>{item.name}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
+    <ul>
+      {items.map((item) => (
+        <li>{item.name}</li>
+      ))}
+    </ul>
   );
 }
