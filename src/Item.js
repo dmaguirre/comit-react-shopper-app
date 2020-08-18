@@ -5,11 +5,11 @@ export default function Item(props) {
     <div className="item">
       <img height="50" width="50" />
       <div className="item-middle">
-        <div>{props.item.name}</div>
+        <div className="item-name">{props.item.name}</div>
         <div>{props.item.description}</div>
       </div>
       <div className="item-end">
-        {props.item.price}
+        <div>${props.item.price}</div>
         <button>Add to Cart</button>
       </div>
     </div>
