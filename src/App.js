@@ -1,16 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 
 import Nav from "./Nav";
 import ItemsTable from "./ItemsTable";
 import CartTable from "./CartTable";
 
 export default function App() {
+  const [selectedTab, setSelectedTab] = useState("items");
+
+  const handleSelectTab = (tab) => {
+    console.log(tab);
+    setSelectedTab(tab);
+    return undefined;
+  };
+
   return (
     <div>
-      <Nav />
+      <Nav onSelectTab={handleSelectTab} />
 
-      <ItemsTable />
-      <CartTable />
+      {selectedTab === "items" ? <ItemsTable /> : <CartTable />}
     </div>
   );
 }
