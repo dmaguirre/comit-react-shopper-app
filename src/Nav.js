@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Nav(props) {
   return (
-    <ul>
+    <ul className="nav">
       <li>
         <button onClick={() => props.onSelectTab("items")}>Items</button>
       </li>

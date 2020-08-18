@@ -36,7 +36,7 @@ export default function ItemsTable() {
     },
   ];
   return (
-    <ul>
+    <ul className="items">
       {items.map((item) => (
         <li key={item.id}>
           <Item item={item} />

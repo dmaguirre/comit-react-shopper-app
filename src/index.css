@@ -1,0 +1,63 @@
+:root {
+  box-sizing: border-box;
+}
+
+*,
+::before,
+::after {
+  box-sizing: inherit;
+}
+
+body {
+  font-family: Helvetica, Arial, sans-serif;
+}
+
+.container {
+  max-width: 900px;
+  margin: 0, auto;
+}
+
+.nav {
+  display: flex;
+  gap: 1em;
+  border-bottom: 2px solid blue;
+  padding-bottom: 0.5em;
+}
+
+.nav li {
+  list-style: none;
+}
+
+.nav button {
+  border: none;
+  background-color: transparent;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.items {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5em;
+}
+
+.items li {
+  list-style: none;
+  border-bottom: 1px solid grey;
+  padding-bottom: 0.5em;
+}
+
+.item {
+  display: flex;
+}
+
+.item-middle {
+  display: inline;
+  text-align: left;
+  margin-left: 0.5em;
+}
+
+.item-end {
+  text-align: right;
+  margin-left: auto;
+}
