@@ -8,6 +8,10 @@
   box-sizing: inherit;
 }
 
+:focus {
+  outline: none;
+}
+
 body {
   font-family: Helvetica, Arial, sans-serif;
 }
@@ -29,11 +33,16 @@ body {
   list-style: none;
 }
 
+.selected-tab {
+  border-bottom: 4px solid gold;
+}
+
 .nav button {
   border: none;
   background-color: transparent;
   font-weight: bold;
   font-size: 1.5rem;
+  cursor: pointer;
 }
 
 .items {
