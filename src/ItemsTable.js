@@ -1,25 +1,46 @@
 import React from "react";
 
+import Item from "./Item";
+
 export default function ItemsTable() {
   const items = [
     {
+      id: 0,
+      name: "Apple iPad",
+      description: "An iPad like no other. WiFi, 4G, lots of storage.",
+      price: 329.0,
+    },
+    {
       id: 1,
-      name: "Apple iPad Mini 2 16GB",
-      description: "An iPad like no other.",
-      price: 229,
+      name: "Apple iPad Pro",
+      description: "Even more expensive than the regular iPad.",
+      price: 799.0,
     },
     {
       id: 2,
-      name: "Apple iPad Mini 2 32GB",
-      description: "Even larger than the 16GB.",
-      price: 279,
+      name: "Canon T7i",
+      description: "DSLR camera with lots of megapixels.",
+      price: 749.99,
+    },
+    {
+      id: 3,
+      name: "Apple Watch Sport",
+      description: "A watch",
+      price: 249.99,
+    },
+    {
+      id: 4,
+      name: "Apple Watch Silver",
+      description: "A more expensive watch",
+      price: 599.99,
     },
   ];
-
   return (
-    <ul>
+    <ul className="items">
       {items.map((item) => (
-        <li>{item.name}</li>
+        <li key={item.id}>
+          <Item item={item} />
+        </li>
       ))}
     </ul>
   );
