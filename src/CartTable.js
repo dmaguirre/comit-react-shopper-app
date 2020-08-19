@@ -6,7 +6,7 @@ export default function CartTable() {
       id: 1,
       name: "Apple iPad Mini 2 16GB",
       description: "An iPad like no other.",
-      price: 229,
+      price: 300,
     },
     {
       id: 3,
