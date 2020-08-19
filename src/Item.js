@@ -10,7 +10,7 @@ export default function Item(props) {
       </div>
       <div className="item-end">
         <div>${props.item.price}</div>
-        <button>Add to Cart</button>
+        {props.children}
       </div>
     </div>
   );

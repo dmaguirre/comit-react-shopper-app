@@ -2,44 +2,14 @@ import React from "react";
 
 import Item from "./Item";
 
-export default function ItemsTable() {
-  const items = [
-    {
-      id: 0,
-      name: "Apple iPad",
-      description: "An iPad like no other. WiFi, 4G, lots of storage.",
-      price: 329.0,
-    },
-    {
-      id: 1,
-      name: "Apple iPad Pro",
-      description: "Even more expensive than the regular iPad.",
-      price: 799.0,
-    },
-    {
-      id: 2,
-      name: "Canon T7i",
-      description: "DSLR camera with lots of megapixels.",
-      price: 749.99,
-    },
-    {
-      id: 3,
-      name: "Apple Watch Sport",
-      description: "A watch",
-      price: 249.99,
-    },
-    {
-      id: 4,
-      name: "Apple Watch Silver",
-      description: "A more expensive watch",
-      price: 599.99,
-    },
-  ];
+export default function ItemsTable(props) {
   return (
     <ul className="items">
-      {items.map((item) => (
+      {props.items.map((item) => (
         <li key={item.id}>
-          <Item item={item} />
+          <Item item={item}>
+            <button onClick={() => props.handleClick(item)}>Add to Cart</button>
+          </Item>
         </li>
       ))}
     </ul>

@@ -33,7 +33,7 @@ body {
   list-style: none;
 }
 
-.selected-tab {
+.active-tab {
   border-bottom: 4px solid gold;
 }
 
@@ -62,7 +62,6 @@ body {
 }
 
 .item-middle {
-  display: inline;
   text-align: left;
   margin-left: 0.5em;
 }
@@ -83,4 +82,5 @@ body {
   border: 2px solid gold;
   padding: 0.5em 1em;
   background-color: transparent;
+  cursor: pointer;
 }
