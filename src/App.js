@@ -60,7 +60,6 @@ export default function App() {
   const handleSelectTab = (tab) => {
     console.log(tab);
     setSelectedTab(tab);
-    return undefined;
   };
 
   const handleAddToCart = (item) => {
