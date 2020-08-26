@@ -1,13 +1,18 @@
 import React from "react";
+import { NavLink } from "react-router-dom";
 
 export default function Nav(props) {
   return (
     <ul className="nav">
-      <li className={props.selectedTab === "items" ? "active-tab" : ""}>
-        <button onClick={() => props.onSelectTab("items")}>Items</button>
+      <li>
+        <NavLink className="nav-link" activeClassName="active-tab" to="/items">
+          Items
+        </NavLink>
       </li>
-      <li className={props.selectedTab === "cart" ? "active-tab" : ""}>
-        <button onClick={() => props.onSelectTab("cart")}>Cart</button>
+      <li>
+        <NavLink className="nav-link" activeClassName="active-tab" to="/cart">
+          Cart
+        </NavLink>
       </li>
     </ul>
   );
