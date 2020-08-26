@@ -1,12 +1,21 @@
 const jwt = require("jsonwebtoken");
+const sqlite3 = require("sqlite3").verbose();
 
 const anonOperations = [{ method: "GET", urls: ["/items"] }];
 
 const APP_SECRET = "appsecret";
 
-let users = {
-  Mark: { password: "a", token: null },
-};
+let db = new sqlite3.Database(
+  "C:/Users/PC/Documents/GitHub/ComIT-React/comit-react/React/shopper/data/users.db",
+  sqlite3.OPEN_READWRITE,
+  (err) => {
+    if (err) {
+      console.error(err);
+    } else {
+      console.log("Connected to the users database.");
+    }
+  }
+);
 
 module.exports = (req, resp, next) => {
   console.log("Authenticating");
@@ -27,11 +36,7 @@ module.exports = (req, resp, next) => {
     const { username, password } = req.body;
     if (findMatch(username, password)) {
       const token = jwt.sign({ data: username, expiresIn: "1h" }, APP_SECRET);
-      users[username] = {
-        password,
-        token,
-      };
-      console.log(users[username]);
+      setUsersToken(username, token);
       resp.json({ success: true, token });
     } else {
       resp.json({ success: false });
@@ -56,5 +61,24 @@ module.exports = (req, resp, next) => {
 };
 
 function findMatch(username, password) {
-  return users[username].password === password;
+  const sql = `SELECT * FROM users`;
+  db.all(sql, [], (err, rows) => {
+    if (err) {
+      throw err;
+    }
+    rows.forEach((row) => {
+      console.log(row.username);
+    });
+  });
+  return true;
+}
+
+function setUsersToken(username, token) {
+  const sql = `UPDATE users SET token = ? WHERE username = ?;`;
+  db.run(sql, [token, username], (err) => {
+    if (err) {
+      return console.error(err.message);
+    }
+    console.log(`Updated row`);
+  });
 }
