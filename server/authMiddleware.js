@@ -23,7 +23,7 @@ module.exports = (req, resp, next) => {
   }
 
   // check if operation is login request
-  if (req.url === "/login" && req.method === "POST") {
+  else if (req.url === "/login" && req.method === "POST") {
     const { username, password } = req.body;
     if (findMatch(username, password)) {
       const token = jwt.sign({ data: username, expiresIn: "1h" }, APP_SECRET);
@@ -40,16 +40,19 @@ module.exports = (req, resp, next) => {
   }
 
   // authenticate
-  const authHeader = req.headers["authorization"];
-  if (authHeader != null && authHeader.startsWith("Bearer<")) {
-    const token = authHeader.substring(7, authHeader.length - 1);
-    jwt.verify(token, APP_SECRET);
-    next();
+  else {
+    const authHeader = req.headers["authorization"];
+    if (authHeader != null && authHeader.startsWith("Bearer<")) {
+      const token = authHeader.substring(7, authHeader.length - 1);
+      console.log(token);
+      jwt.verify(token, APP_SECRET);
+      next();
+    } else {
+      // authentication failed
+      resp.statusCode = 401;
+      resp.end();
+    }
   }
-
-  // authentication failed
-  resp.statusCode = 401;
-  resp.end();
 };
 
 function findMatch(username, password) {

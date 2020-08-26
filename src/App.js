@@ -53,7 +53,9 @@ export default function App() {
   };
 
   const handleAddToCart = async (item) => {
-    const response = await axios.post("http://localhost:4000/cart", item);
+    const response = await axios.post("http://localhost:4000/cart", item, {
+      headers: { Authorization: `Bearer<${localStorage.getItem("token")}>` },
+    });
     if (response.status < 400) {
       const updatedCartItems = [...cartItems, item];
       setCartItems(updatedCartItems);
