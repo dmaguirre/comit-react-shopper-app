@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Redirect } from "react-router-dom";
 import axios from "axios";
 
 import "./index.css";
@@ -8,7 +8,6 @@ import ItemsTable from "./ItemsTable";
 import CartTable from "./CartTable";
 
 export default function App() {
-  const [selectedTab, setSelectedTab] = useState("items");
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
@@ -31,11 +30,6 @@ export default function App() {
     fetchCartItems();
   }, []);
 
-  const handleSelectTab = (tab) => {
-    console.log(tab);
-    setSelectedTab(tab);
-  };
-
   const handleAddToCart = async (item) => {
     const response = await axios.post("http://localhost:4000/cart", item);
     if (response.status < 400) {
@@ -46,7 +40,7 @@ export default function App() {
 
   return (
     <div className="container">
-      <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
+      <Nav />
 
       <Switch>
         <Route
@@ -56,12 +50,7 @@ export default function App() {
           )}
         />
         <Route path="/cart" render={() => <CartTable items={cartItems} />} />
-        <Route
-          path="/"
-          render={() => (
-            <ItemsTable items={items} handleClick={handleAddToCart} />
-          )}
-        />
+        <Redirect to="/items" />
       </Switch>
     </div>
   );
