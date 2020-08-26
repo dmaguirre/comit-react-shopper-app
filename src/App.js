@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 import "./index.css";
 import Nav from "./Nav";
@@ -7,64 +8,39 @@ import CartTable from "./CartTable";
 
 export default function App() {
   const [selectedTab, setSelectedTab] = useState("items");
-  const [cartItems, setCartItems] = useState([
-    {
-      id: 1,
-      name: "Apple iPad Mini 2 16GB",
-      description: "An iPad like no other.",
-      price: 300,
-      quantity: 3,
-    },
-    {
-      id: 3,
-      name: "Canon T6i",
-      description: "DSLR camera with lots of megapixels.",
-      price: 749.99,
-      quantity: 1,
-    },
-  ]);
+  const [items, setItems] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
 
-  const items = [
-    {
-      id: 0,
-      name: "Apple iPad",
-      description: "An iPad like no other. WiFi, 4G, lots of storage.",
-      price: 329.0,
-    },
-    {
-      id: 1,
-      name: "Apple iPad Pro",
-      description: "Even more expensive than the regular iPad.",
-      price: 799.0,
-    },
-    {
-      id: 2,
-      name: "Canon T7i",
-      description: "DSLR camera with lots of megapixels.",
-      price: 749.99,
-    },
-    {
-      id: 3,
-      name: "Apple Watch Sport",
-      description: "A watch",
-      price: 249.99,
-    },
-    {
-      id: 4,
-      name: "Apple Watch Silver",
-      description: "A more expensive watch",
-      price: 599.99,
-    },
-  ];
+  useEffect(() => {
+    const fetchItems = async () => {
+      const response = await axios.get("http://localhost:4000/items");
+      console.log(response);
+      const fetchedItems = response.data;
+      console.log(`fetched items: ${fetchedItems}`);
+      setItems(fetchedItems);
+    };
+
+    const fetchCartItems = async () => {
+      const response = await axios.get("http://localhost:4000/cart");
+      const fetchedCartItems = response.data;
+      setCartItems(fetchedCartItems);
+    };
+
+    fetchItems();
+    fetchCartItems();
+  }, []);
 
   const handleSelectTab = (tab) => {
     console.log(tab);
     setSelectedTab(tab);
   };
 
-  const handleAddToCart = (item) => {
-    const updatedCartItems = [...cartItems, item];
-    setCartItems(updatedCartItems);
+  const handleAddToCart = async (item) => {
+    const response = await axios.post("http://localhost:4000/cart", item);
+    if (response.status < 400) {
+      const updatedCartItems = [...cartItems, item];
+      setCartItems(updatedCartItems);
+    }
   };
 
   return (
