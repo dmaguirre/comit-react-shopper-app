@@ -4,10 +4,12 @@ import axios from "axios";
 
 import "./index.css";
 import Nav from "./Nav";
+import SignUpForm from "./SignUpForm";
 import ItemsTable from "./ItemsTable";
 import CartTable from "./CartTable";
 
 export default function App() {
+  const [formValues, setFormValues] = useState({});
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
@@ -30,6 +32,24 @@ export default function App() {
     fetchCartItems();
   }, []);
 
+  const handleFormChange = (event) => {
+    setFormValues({ ...formValues, [event.target.id]: event.target.value });
+  };
+
+  const handleSubmitSignUp = async (event) => {
+    event.preventDefault();
+
+    const response = await axios.post(
+      "http://localhost:4000/signup",
+      formValues
+    );
+    console.log(response);
+    if (response.status < 400 && response.data.success) {
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+    }
+  };
+
   const handleAddToCart = async (item) => {
     const response = await axios.post("http://localhost:4000/cart", item);
     if (response.status < 400) {
@@ -43,6 +63,15 @@ export default function App() {
       <Nav />
 
       <Switch>
+        <Route
+          path="/signup"
+          render={() => (
+            <SignUpForm
+              handleSubmit={handleSubmitSignUp}
+              handleChange={handleFormChange}
+            />
+          )}
+        />
         <Route
           path="/items"
           render={() => (
