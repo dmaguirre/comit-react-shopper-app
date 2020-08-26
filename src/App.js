@@ -23,7 +23,9 @@ export default function App() {
     };
 
     const fetchCartItems = async () => {
-      const response = await axios.get("http://localhost:4000/cart");
+      const response = await axios.get("http://localhost:4000/cart", {
+        headers: { Authorization: `Bearer<${localStorage.getItem("token")}>` },
+      });
       const fetchedCartItems = response.data;
       setCartItems(fetchedCartItems);
     };
@@ -40,7 +42,7 @@ export default function App() {
     event.preventDefault();
 
     const response = await axios.post(
-      "http://localhost:4000/signup",
+      "http://localhost:4000/login",
       formValues
     );
     console.log(response);
