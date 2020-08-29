@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 
 import "./index.css";
@@ -47,11 +48,21 @@ export default function App() {
     <div className="container">
       <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
 
-      {selectedTab === "items" ? (
-        <ItemsTable items={items} handleClick={handleAddToCart} />
-      ) : (
-        <CartTable items={cartItems} />
-      )}
+      <Switch>
+        <Route
+          path="/items"
+          render={() => (
+            <ItemsTable items={items} handleClick={handleAddToCart} />
+          )}
+        ></Route>
+
+        <Route
+          path="/cart"
+          render={() => <CartTable items={cartItems} />}
+        ></Route>
+
+        <Redirect to="/items" />
+      </Switch>
     </div>
   );
 }
