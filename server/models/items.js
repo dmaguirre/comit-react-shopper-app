@@ -9,7 +9,7 @@ async function list() {
 
 async function get(id) {
   const data = await fs.readFile(dataPath);
-  return JSON.parse(data).items.filter((item) => item.id === id);
+  return JSON.parse(data).items.find((item) => item.id === id);
 }
 
 module.exports = { list, get };

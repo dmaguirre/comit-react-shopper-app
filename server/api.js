@@ -1,6 +1,6 @@
 const Items = require("./models/items");
 
-async function getItems(req, res) {
+async function getItems(req, res, next) {
   const { offset = 0, limit = 25, tag } = req.query;
 
   try {
@@ -10,7 +10,7 @@ async function getItems(req, res) {
       .slice(Number(offset), Number(offset) + Number(limit));
     res.json(filteredData);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return next(err);
   }
 }
 
@@ -20,10 +20,10 @@ async function getItem(req, res, next) {
   try {
     const item = await Items.get(Number(id));
 
-    if (!item) return next();
+    if (!item) return next({ message: "Item not found" });
     res.json(item);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    return next(err);
   }
 }
 
