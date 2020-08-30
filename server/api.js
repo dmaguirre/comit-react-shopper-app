@@ -27,4 +27,16 @@ async function getItem(req, res, next) {
   }
 }
 
-module.exports = { getItems, getItem };
+async function createItem(req, res, next) {
+  res.json(req.body);
+}
+
+async function updateItem(req, res, next) {
+  res.json(req.body);
+}
+
+async function deleteItem(req, res, next) {
+  res.json({ success: true });
+}
+
+module.exports = { getItems, getItem, createItem, updateItem, deleteItem };
