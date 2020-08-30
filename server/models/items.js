@@ -1,7 +1,10 @@
-const dataPath = "../../data/items.json";
+const fs = require("fs").promises;
+
+const dataPath = "./data/items.json";
 
 async function list() {
-  return await require(dataPath);
+  const data = await fs.readFile(dataPath);
+  return JSON.parse(data);
 }
 
 module.exports = { list };
