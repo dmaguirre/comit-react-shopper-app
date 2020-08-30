@@ -7,4 +7,9 @@ async function list() {
   return JSON.parse(data).items;
 }
 
-module.exports = { list };
+async function get(id) {
+  const data = await fs.readFile(dataPath);
+  return JSON.parse(data).items.filter((item) => item.id === id);
+}
+
+module.exports = { list, get };

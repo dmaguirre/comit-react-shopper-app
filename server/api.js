@@ -14,4 +14,17 @@ async function getItems(req, res) {
   }
 }
 
-module.exports = { getItems };
+async function getItem(req, res, next) {
+  const { id } = req.params;
+
+  try {
+    const item = await Items.get(Number(id));
+
+    if (!item) return next();
+    res.json(item);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+}
+
+module.exports = { getItems, getItem };
