@@ -33,10 +33,9 @@
   ],
   "cart": [
     {
-      "id": 1,
-      "name": "Apple iPad",
-      "description": "An iPad like no other. WiFi, 4G, lots of storage.",
-      "price": 329
+      "itemId": 0,
+      "quantity": 2,
+      "id": 1
     }
   ]
 }

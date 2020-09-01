@@ -15,15 +15,17 @@ export default function App() {
   useEffect(() => {
     const fetchItems = async () => {
       const response = await axios.get("http://localhost:4000/items");
-      console.log(response);
+      // console.log(response);
       const fetchedItems = response.data;
-      console.log(`fetched items: ${fetchedItems}`);
+      // console.log(`fetched items: ${fetchedItems}`);
       setItems(fetchedItems);
     };
 
     const fetchCartItems = async () => {
       const response = await axios.get("http://localhost:4000/cart");
       const fetchedCartItems = response.data;
+      console.log(fetchedCartItems);
+
       setCartItems(fetchedCartItems);
     };
 
@@ -37,11 +39,58 @@ export default function App() {
   };
 
   const handleAddToCart = async (item) => {
-    const response = await axios.post("http://localhost:4000/cart", item);
+    const existingCartItem = cartItems.find(
+      (cartItem) => item.id === cartItem.itemId
+    );
+
+    if (existingCartItem) {
+      console.log(existingCartItem);
+      increaseQuantity(existingCartItem);
+    } else {
+      addNewItem(item);
+    }
+  };
+
+  const increaseQuantity = async (existingCartItem) => {
+    const updatedCartItems = cartItems.map((cartItem) => {
+      return cartItem.itemId === existingCartItem.itemId
+        ? { ...cartItem, quantity: cartItem.quantity + 1 }
+        : cartItem;
+    });
+    const updatedCartItem = updatedCartItems.find(
+      (cartItem) => cartItem.itemId === existingCartItem.itemId
+    );
+    const response = await axios.put(
+      `http://localhost:4000/cart/${updatedCartItem.id}`,
+      updatedCartItem
+    );
     if (response.status < 400) {
-      const updatedCartItems = [...cartItems, item];
       setCartItems(updatedCartItems);
     }
+  };
+
+  const addNewItem = async (item) => {
+    const cartItem = {
+      itemId: item.id,
+      quantity: 1,
+    };
+    const response = await axios.post("http://localhost:4000/cart", cartItem);
+    if (response.status < 400) {
+      const updatedCartItems = [...cartItems, cartItem];
+      setCartItems(updatedCartItems);
+    }
+  };
+
+  const setCartItemsValues = () => {
+    return cartItems.map((cartItem) => {
+      const item = items.find((item) => item.id === cartItem.itemId);
+      return {
+        ...cartItem,
+        name: item.name,
+        description: item.description,
+        price: item.price,
+      };
+    });
   };
 
   return (
@@ -58,7 +107,7 @@ export default function App() {
 
         <Route
           path="/cart"
-          render={() => <CartTable items={cartItems} />}
+          render={() => <CartTable items={setCartItemsValues()} />}
         ></Route>
 
         <Redirect to="/items" />
