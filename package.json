@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^7.1.2",
     "axios": "^0.20.0",
     "dotenv": "^8.2.0",
+    "query-string": "^6.13.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-router": "^5.2.0",
@@ -19,7 +20,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "server": "nodemon ./server/node-server.js"
+    "server": "nodemon ./server/express-server.js"
   },
   "eslintConfig": {
     "extends": "react-app"
