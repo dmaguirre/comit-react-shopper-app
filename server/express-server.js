@@ -1,15 +1,25 @@
 const express = require('express');
-const queryString = require('query-string');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+
 
 const data = require("../data/items.json");
 
 const app = express();
 
+// app.use((req, res, next) => {
+//     res.setHeader('Access-Control-Allow-Origin', '*');
+//     next();
+// });
+
+app.use(cors());
+app.use(bodyParser());
+
 app.get('/items', (req, res) => {
-    const { query } = queryString.parseUrl(req.url);
-    const { tag, limit, offset } = query;
+    const { tag, limit = 25, offset = 0 } = req.query;
     const filteredItems = data.items.filter((item) => !tag || item.tags.includes(tag));
-    res.json(filteredItems);
+    const selectedItems = filteredItems.slice(offset, offset + limit)
+    res.json(selectedItems);
 })
 app.get('/cart', (req, res) => {
     res.json(data.cart);
