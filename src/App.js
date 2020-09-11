@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
+import {orderBy} from 'lodash';
 
 import "./index.css";
 import Nav from "./Nav";
@@ -9,6 +10,7 @@ import CartTable from "./CartTable";
 
 export default function App() {
   const [selectedTab, setSelectedTab] = useState("items");
+  const [sortCriteria, setSortCriteria] = useState(['name', 'asc']);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
 
@@ -32,6 +34,10 @@ export default function App() {
     fetchItems();
     fetchCartItems();
   }, []);
+
+  const sortedItems = useMemo(() => {
+    return orderBy(items, sortCriteria[0], sortCriteria[1]);
+  }, [items, sortCriteria])
 
   const handleSelectTab = (tab) => {
     console.log(tab);
@@ -101,7 +107,7 @@ export default function App() {
         <Route
           path="/items"
           render={() => (
-            <ItemsTable items={items} handleClick={handleAddToCart} />
+            <ItemsTable items={sortedItems} handleClick={handleAddToCart} />
           )}
         ></Route>
 
