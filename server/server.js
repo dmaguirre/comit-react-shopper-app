@@ -1,7 +1,10 @@
 const express = require("express");
+require("dotenv").config();
 
 const { getItems, getItem, getCart } = require("./api");
 const { handleError, notFound } = require("./middleware/errorHandling");
+
+console.log(process.env.PORT);
 
 const app = express();
 
