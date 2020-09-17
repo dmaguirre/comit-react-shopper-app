@@ -1,4 +1,7 @@
 const { Pool } = require('pg');
+const bcrypt = require('bcrypt');
+
+const SALT_ROUNDS = 10;
 
 const connectionString = process.env.CONNECTION_STRING;
 const pool = new Pool({ connectionString });
@@ -54,9 +57,24 @@ async function getCart(req, res) {
   res.json({ message: 'Resource not implemented yet' });
 }
 
+async function createUser(req, res, next) {
+  const user = req.body;
+  try {
+    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
+    const { rows } = await pool.query(`INSERT INTO users (username, email, password) VALUES ('${user.username}', '${user.email}', '${hashedPassword}') RETURNING id, username, email`);
+    if (!rows || rows.length !== 1) {
+      throw new Error('Failed to insert user into database');
+    }
+    res.json(rows[0]);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getItems,
   getItem,
   createItem,
   getCart,
+  createUser,
 };
