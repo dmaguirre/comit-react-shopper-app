@@ -1,20 +1,19 @@
-const { Pool } = require('pg');
 const bcrypt = require('bcrypt');
 
-const SALT_ROUNDS = 10;
+const repository = require('./repository');
 
-const connectionString = process.env.CONNECTION_STRING;
-const pool = new Pool({ connectionString });
+
+const SALT_ROUNDS = 10;
 
 async function getItems(req, res, next) {
   const { offset = 0, limit = 25, tag } = req.query;
 
   try {
-    const { rows } = await pool.query('SELECT * FROM items');
-    const items = rows
+    const items = await repository.getItems();
+    const resultItems = items
       .map((row) => ({ ...row, price: parseFloat(row.price.replace('$', '')) }))
       .slice(Number(offset), Number(offset) + Number(limit));
-    res.json(items);
+    res.json(resultItems);
   } catch (err) {
     next(err);
   }
@@ -24,11 +23,10 @@ async function getItem(req, res, next) {
   const id = Number(req.params.id);
 
   try {
-    const { rows } = await pool.query(`SELECT * FROM items WHERE id = ${id}`);
-    const row = rows[0];
-    if (row) {
-      const item = { ...row, price: parseFloat(row.price.replace('$', '')) };
-      res.json(item);
+    const item = await repository.getItem(id);
+    if (item) {
+      const resultItem = { ...item, price: parseFloat(item.price.replace('$', '')) };
+      res.json(resultItem);
     } else {
       return next();
     }
@@ -38,16 +36,11 @@ async function getItem(req, res, next) {
 }
 
 async function createItem(req, res, next) {
-  const item = req.body;
+  const itemData = req.body;
   try {
-    const { rows } = await pool.query(`INSERT INTO items (name, description, price) VALUES ('${item.name}', '${item.description}', ${item.price}) RETURNING *`);
-    console.log(rows);
-    if (rows && rows.length === 1) {
-      const item = { ...rows[0], price: parseFloat(rows[0].price.replace('$', '')) };
-      res.json(item);
-    } else {
-      return next();
-    }
+    const item = await repository.createItem(itemData);
+    const resultItem = { ...item, price: parseFloat(item.price.replace('$', '')) };
+    res.json(resultItem);
   } catch (err) {
     next(err);
   }
@@ -58,14 +51,11 @@ async function getCart(req, res) {
 }
 
 async function createUser(req, res, next) {
-  const user = req.body;
+  const userData = req.body;
   try {
-    const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
-    const { rows } = await pool.query(`INSERT INTO users (username, email, password) VALUES ('${user.username}', '${user.email}', '${hashedPassword}') RETURNING id, username, email`);
-    if (!rows || rows.length !== 1) {
-      throw new Error('Failed to insert user into database');
-    }
-    res.json(rows[0]);
+    const hashedPassword = await bcrypt.hash(userData.password, SALT_ROUNDS);
+    const user = await repository.createUser({ ...userData, password: hashedPassword });
+    res.json(user);
   } catch (err) {
     next(err);
   }
