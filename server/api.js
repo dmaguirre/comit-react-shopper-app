@@ -51,6 +51,7 @@ async function createItem(req, res, next) {
 }
 
 async function getCart(req, res) {
+  res.json({ message: 'Resource not implemented yet' });
 }
 
 module.exports = {
