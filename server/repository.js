@@ -18,6 +18,11 @@ async function createItem(item) {
     return rows[0];
 }
 
+async function getUser(username) {
+    const { rows } = await pool.query(`SELECT * FROM users WHERE username = '${username}'`);
+    return rows[0];
+}
+
 async function createUser(user) {
     const { rows } = await pool.query(`INSERT INTO users (username, email, password) VALUES ('${user.username}', '${user.email}', '${user.password}') RETURNING id, username, email`);
     return rows[0];
@@ -27,5 +32,6 @@ module.exports = {
   getItems,
   getItem,
   createItem,
+  getUser,
   createUser,
 };
