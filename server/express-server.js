@@ -7,7 +7,7 @@ const Strategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 
-const { ensureAdmin } = require('./auth');
+const { ensureAdmin } = require('./middleware/auth');
 const { getItems, getItem, createItem, getCart } = require('./api');
 
 const sessionSecret = process.env.SESSION_SECRET;
