@@ -5,11 +5,13 @@ const expressSession = require('express-session');
 const sessionSecret = process.env.SESSION_SECRET;
 const adminPassword = process.env.ADMIN_PASSWORD;
 
+// configures passport to use our function for checking username and password
 passport.use(adminStrategy());
 passport.serializeUser((user, callback) => callback(null, user));
 passport.deserializeUser((user, callback) => callback(null, user));
 const authenticate = passport.authenticate('local');
 
+// sets up express and passport to use sessions
 function setAuthMiddleware(app) {
     app.use(expressSession({
         secret: sessionSecret,
@@ -21,6 +23,7 @@ function setAuthMiddleware(app) {
     app.use(passport.session());
 }
 
+// function used by passport to authenticate admin login
 function adminStrategy() {
     return new Strategy((username, password, callback) => {
         const isAdmin = username === 'admin' && password === adminPassword;
@@ -36,6 +39,7 @@ function login(req, res) {
     res.json({ success: true });
 }
 
+// route middleware to ensure route only used by admin
 function ensureAdmin(req, res, next) {
     const isAdmin = req.user && req.user.username === 'admin';
     if (isAdmin) {
