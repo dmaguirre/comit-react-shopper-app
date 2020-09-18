@@ -2,43 +2,19 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
-const passport = require('passport');
-const Strategy = require('passport-local').Strategy;
 const cookieParser = require('cookie-parser');
-const expressSession = require('express-session');
 
-const { ensureAdmin } = require('./middleware/auth');
+const { setAuthMiddleware, authenticate, ensureAdmin } = require('./middleware/auth-sessions');
 const { getItems, getItem, createItem, getCart } = require('./api');
 
-const sessionSecret = process.env.SESSION_SECRET;
-const adminPassword = process.env.ADMIN_PASSWORD;
-
-passport.use(new Strategy((username, password, callback) => {
-    const isAdmin = username === 'admin' && password === adminPassword;
-    if (isAdmin) {
-        callback(null, { username: 'admin' });
-    } else {
-        callback(null, false);
-    }
-}))
-
-passport.serializeUser((user, callback) => callback(null, user));
-passport.deserializeUser((user, callback) => callback(null, user));
-
 const app = express();
-
+//comment
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
-app.use(expressSession({
-    secret: sessionSecret,
-    resave: false,
-    saveUninitialized: false,
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+setAuthMiddleware(app);
 
-app.post('/login', passport.authenticate('local'), (req, res) => res.json({ success: true }));
+app.post('/login', authenticate, (req, res) => res.json({ success: true }));
 
 app.get('/items', getItems);
 app.get('/items/:id', getItem);
