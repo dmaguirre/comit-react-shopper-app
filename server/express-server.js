@@ -4,22 +4,23 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
-const { setAuthMiddleware, authenticate, ensureAdmin } = require('./middleware/auth-sessions');
-const { getItems, getItem, createItem, getCart } = require('./api');
+const { authenticate, login, ensureAdmin, ensureUser } = require('./middleware/auth-jwt');
+const { getItems, getItem, createItem, getCart, getUser, createUser } = require('./api');
 
 const app = express();
-//comment
+
 app.use(cors());
 app.use(bodyParser.json());
 app.use(cookieParser());
-setAuthMiddleware(app);
 
-app.post('/login', authenticate, (req, res) => res.json({ success: true }));
+app.post('/login', authenticate, login);
 
 app.get('/items', getItems);
 app.get('/items/:id', getItem);
 app.post('/items', ensureAdmin, createItem);
-app.get('/cart', getCart);
+app.get('/cart', ensureUser, getCart);
+app.post('/users', ensureAdmin, createUser);
+
 app.get('/', (req, res) => {
     res.status(404).json({ message: 'Resource not found'});
 })

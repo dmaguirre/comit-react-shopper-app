@@ -31,6 +31,10 @@ function adminStrategy() {
     })
 }
 
+function login(req, res) {
+    res.json({ success: true });
+}
+
 function ensureAdmin(req, res, next) {
     const isAdmin = req.user && req.user.username === 'admin';
     if (isAdmin) {
@@ -42,5 +46,6 @@ function ensureAdmin(req, res, next) {
 module.exports = {
     authenticate,
     setAuthMiddleware,
+    login,
     ensureAdmin
 }
