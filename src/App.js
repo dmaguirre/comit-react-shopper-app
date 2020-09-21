@@ -4,9 +4,11 @@ import axios from "axios";
 import {orderBy} from 'lodash';
 
 import "./index.css";
+import AuthProvider from "./auth/AuthProvider";
 import Nav from "./Nav";
 import ItemsTable from "./ItemsTable";
 import CartTable from "./CartTable";
+import Login from "./auth/Login";
 
 export default function App() {
   const [selectedTab, setSelectedTab] = useState("items");
@@ -32,7 +34,7 @@ export default function App() {
     };
 
     fetchItems();
-    fetchCartItems();
+    //fetchCartItems();
   }, []);
 
   const sortedItems = useMemo(() => {
@@ -101,23 +103,30 @@ export default function App() {
 
   return (
     <div className="container">
-      <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
+      <AuthProvider>
+        <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
 
-      <Switch>
-        <Route
-          path="/items"
-          render={() => (
-            <ItemsTable items={sortedItems} handleClick={handleAddToCart} />
-          )}
-        ></Route>
+        <Switch>
+          <Route
+            path="/items"
+            render={() => (
+              <ItemsTable items={sortedItems} handleClick={handleAddToCart} />
+            )}
+          ></Route>
 
-        <Route
-          path="/cart"
-          render={() => <CartTable items={setCartItemsValues()} />}
-        ></Route>
+          <Route
+            path="/cart"
+            render={() => <CartTable items={setCartItemsValues()} />}
+          ></Route>
 
-        <Redirect to="/items" />
-      </Switch>
+          <Route
+            path="/login"
+            component={Login}
+          ></Route>
+
+          <Redirect to="/items" />
+        </Switch>
+      </AuthProvider>
     </div>
   );
 }
