@@ -18,6 +18,16 @@ export default function Nav(props) {
           Cart
         </NavLink>
       </li>
+      <li>
+        <NavLink className="nav-button" activeClassName="active-tab" to="/login">
+          Login
+        </NavLink>
+      </li>
+      <li>
+        <NavLink className="nav-button" activeClassName="active-tab" to="/admin">
+          Admin
+        </NavLink>
+      </li>
     </ul>
   );
 }

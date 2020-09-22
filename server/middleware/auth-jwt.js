@@ -42,6 +42,7 @@ async function login(req, res) {
 }
 
 async function ensureAdmin(req, res, next) {
+    console.log('Ensuring that client is admin');
     const jwtString = req.headers.authorization;
     try {
         const user = await jwt.verify(jwtString.replace('Bearer ', ''), jwtSecret);

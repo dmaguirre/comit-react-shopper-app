@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect, useMemo, useContext } from "react";
 import { Switch, Route, Redirect } from "react-router-dom";
 import axios from "axios";
 import {orderBy} from 'lodash';
@@ -7,12 +7,17 @@ import "./index.css";
 import Nav from "./Nav";
 import ItemsTable from "./ItemsTable";
 import CartTable from "./CartTable";
+import LoginContainer from "./auth/LoginContainer";
+import ItemManagement from "./admin/ItemManagement";
+import { AuthContext } from "./auth/AuthProvider";
 
 export default function App() {
   const [selectedTab, setSelectedTab] = useState("items");
   const [sortCriteria, setSortCriteria] = useState(['name', 'asc']);
   const [items, setItems] = useState([]);
   const [cartItems, setCartItems] = useState([]);
+
+  const { isAuthenticated } = useContext(AuthContext);
 
   useEffect(() => {
     const fetchItems = async () => {
@@ -32,7 +37,7 @@ export default function App() {
     };
 
     fetchItems();
-    fetchCartItems();
+    //fetchCartItems();
   }, []);
 
   const sortedItems = useMemo(() => {
@@ -101,23 +106,33 @@ export default function App() {
 
   return (
     <div className="container">
-      <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
+        <Nav selectedTab={selectedTab} onSelectTab={handleSelectTab} />
 
-      <Switch>
-        <Route
-          path="/items"
-          render={() => (
-            <ItemsTable items={sortedItems} handleClick={handleAddToCart} />
-          )}
-        ></Route>
+        <Switch>
+          <Route
+            path="/items"
+            render={() => (
+              <ItemsTable items={sortedItems} handleClick={handleAddToCart} />
+            )}
+          ></Route>
 
-        <Route
-          path="/cart"
-          render={() => <CartTable items={setCartItemsValues()} />}
-        ></Route>
+          <Route
+            path="/cart"
+            render={() => <CartTable items={setCartItemsValues()} />}
+          ></Route>
 
-        <Redirect to="/items" />
-      </Switch>
+          <Route
+            path="/login"
+            component={LoginContainer}
+          ></Route>
+
+          <Route
+            path="/admin"
+            route={() => isAuthenticated ? <ItemManagement/> : null}
+          ></Route>
+
+          <Redirect to="/items" />
+        </Switch>
     </div>
   );
 }

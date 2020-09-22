@@ -5,7 +5,7 @@ const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
 const { authenticate, login, ensureAdmin, ensureUser } = require('./middleware/auth-jwt');
-const { getItems, getItem, createItem, getCart, getUser, createUser } = require('./api');
+const { getItems, getItem, createItem, getCart, createUser } = require('./api');
 
 const app = express();
 
